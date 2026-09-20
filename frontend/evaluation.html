@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>FaceSense AI - Evaluation</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .card h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        .value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .section h2 {
+            margin-bottom: 15px;
+        }
+
+        .identity-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .identity {
+            background: #eef2ff;
+            color: #3730a3;
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        th {
+            background: #111827;
+            color: white;
+        }
+
+        .success {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>FaceSense AI</h1>
+
+    <p>
+        Model Evaluation & Threshold Analysis
+    </p>
+
+</header>
+
+
+<div class="container">
+
+    <a
+        href="/app/index.html"
+        class="back"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+    <div
+        id="loading"
+        class="loading"
+    >
+        Loading evaluation results...
+    </div>
+
+
+    <div
+        id="content"
+        style="display:none;"
+    >
+
+        <div class="grid">
+
+            <div class="card">
+                <h3>Selected Threshold</h3>
+                <div
+                    class="value"
+                    id="threshold"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="card">
+                <h3>Precision</h3>
+                <div
+                    class="value"
+                    id="precision"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="card">
+                <h3>Recall</h3>
+                <div
+                    class="value"
+                    id="recall"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="card">
+                <h3>F1 Score</h3>
+                <div
+                    class="value"
+                    id="f1"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="card">
+                <h3>FAR</h3>
+                <div
+                    class="value"
+                    id="far"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="card">
+                <h3>FRR</h3>
+                <div
+                    class="value"
+                    id="frr"
+                >
+                    -
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Similarity Analysis
+            </h2>
+
+            <div class="grid">
+
+                <div class="card">
+                    <h3>Genuine Mean</h3>
+                    <div
+                        class="value"
+                        id="genuineMean"
+                    >
+                        -
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Genuine Range</h3>
+                    <div
+                        class="value"
+                        id="genuineRange"
+                    >
+                        -
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Impostor Mean</h3>
+                    <div
+                        class="value"
+                        id="impostorMean"
+                    >
+                        -
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Impostor Range</h3>
+                    <div
+                        class="value"
+                        id="impostorRange"
+                    >
+                        -
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Registered Identities
+            </h2>
+
+            <div
+                id="identities"
+                class="identity-box"
+            >
+            </div>
+
+        </div>
+
+
+        <div class="section">
+
+            <h2>
+                Confusion Matrix
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th></th>
+                        <th>Predicted Known</th>
+                        <th>Predicted Unknown</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <th>Actual Known</th>
+
+                        <td id="tp">
+                            -
+                        </td>
+
+                        <td id="fn">
+                            -
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>Actual Unknown</th>
+
+                        <td id="fp">
+                            -
+                        </td>
+
+                        <td id="tn">
+                            -
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="error"
+        class="error"
+        style="display:none;"
+    >
+    </div>
+
+</div>
+
+
+<script>
+
+async function loadEvaluation() {
+
+    try {
+
+        const response = await fetch(
+            "/evaluation"
+        );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Evaluation results not found."
+            );
+
+        }
+
+        const data = await response.json();
+
+
+        document.getElementById(
+            "threshold"
+        ).textContent =
+            Number(
+                data.selected_threshold
+            ).toFixed(2);
+
+
+        document.getElementById(
+            "precision"
+        ).textContent =
+            (
+                data.precision * 100
+            ).toFixed(1) + "%";
+
+
+        document.getElementById(
+            "recall"
+        ).textContent =
+            (
+                data.recall * 100
+            ).toFixed(1) + "%";
+
+
+        document.getElementById(
+            "f1"
+        ).textContent =
+            (
+                data.f1_score * 100
+            ).toFixed(1) + "%";
+
+
+        document.getElementById(
+            "far"
+        ).textContent =
+            (
+                data.far * 100
+            ).toFixed(1) + "%";
+
+
+        document.getElementById(
+            "frr"
+        ).textContent =
+            (
+                data.frr * 100
+            ).toFixed(1) + "%";
+
+
+        document.getElementById(
+            "genuineMean"
+        ).textContent =
+            Number(
+                data.genuine_mean
+            ).toFixed(3);
+
+
+        document.getElementById(
+            "genuineRange"
+        ).textContent =
+            Number(
+                data.genuine_min
+            ).toFixed(3)
+            +
+            " - "
+            +
+            Number(
+                data.genuine_max
+            ).toFixed(3);
+
+
+        document.getElementById(
+            "impostorMean"
+        ).textContent =
+            Number(
+                data.impostor_mean
+            ).toFixed(3);
+
+
+        document.getElementById(
+            "impostorRange"
+        ).textContent =
+            Number(
+                data.impostor_min
+            ).toFixed(3)
+            +
+            " - "
+            +
+            Number(
+                data.impostor_max
+            ).toFixed(3);
+
+
+        document.getElementById(
+            "tp"
+        ).textContent =
+            data.true_positive;
+
+
+        document.getElementById(
+            "tn"
+        ).textContent =
+            data.true_negative;
+
+
+        document.getElementById(
+            "fp"
+        ).textContent =
+            data.false_positive;
+
+
+        document.getElementById(
+            "fn"
+        ).textContent =
+            data.false_negative;
+
+
+        const identityContainer =
+            document.getElementById(
+                "identities"
+            );
+
+
+        data.registered_identities.forEach(
+            function(name) {
+
+                const span =
+                    document.createElement(
+                        "span"
+                    );
+
+                span.className =
+                    "identity";
+
+                span.textContent =
+                    name;
+
+                identityContainer.appendChild(
+                    span
+                );
+
+            }
+        );
+
+
+        document.getElementById(
+            "loading"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "content"
+        ).style.display = "block";
+
+    }
+
+    catch (error) {
+
+        document.getElementById(
+            "loading"
+        ).style.display = "none";
+
+        const errorBox =
+            document.getElementById(
+                "error"
+            );
+
+        errorBox.textContent =
+            error.message;
+
+        errorBox.style.display =
+            "block";
+
+    }
+
+}
+
+
+loadEvaluation();
+
+</script>
+
+</body>
+
+</html>

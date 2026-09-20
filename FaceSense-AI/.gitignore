@@ -1,0 +1,41 @@
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Face database / biometric data
+data/face_database.pkl
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Personal test images
+data/**/*.jpg
+data/**/*.jpeg
+data/**/*.png
+data/**/*.webp
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated evaluation files
+results/*.csv
+results/*.json
+
+# Evaluation and biometric test data
+data/evaluation/
+data/failure_tests/
+results/*.pkl

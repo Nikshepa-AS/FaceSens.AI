@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FaceSense AI</title>
+
+<style>
+:root{
+    --navy:#26344a;
+    --pink:#d85b88;
+    --pink-dark:#b94570;
+    --pink-light:#fff0f5;
+    --bg:#fff7fa;
+    --white:#ffffff;
+    --text:#293247;
+    --muted:#7d8292;
+    --border:#eee1e7;
+    --green:#218a63;
+    --green-light:#edf8f3;
+    --red:#d15d6b;
+    --red-light:#fff0f4;
+    --blue:#397aa2;
+    --blue-light:#eef4fb;
+    --shadow:0 10px 28px rgba(76,48,65,.08);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Inter,"Segoe UI",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+button,input{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:235px;
+    background:#fff;
+    border-right:1px solid var(--border);
+    padding:22px 15px;
+    z-index:100;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:4px 9px 28px;
+}
+
+.brand-mark{
+    width:40px;
+    height:40px;
+    border-radius:11px;
+    background:var(--navy);
+    color:#fff;
+    display:grid;
+    place-items:center;
+    font-weight:800;
+}
+
+.brand b{
+    font-size:17px;
+}
+
+.brand small{
+    display:block;
+    color:var(--muted);
+    font-size:8px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-top:2px;
+}
+
+.nav-label{
+    font-size:8px;
+    color:#a0adb5;
+    font-weight:800;
+    letter-spacing:1.4px;
+    padding:0 11px 8px;
+}
+
+.nav{
+    display:grid;
+    gap:4px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#71828e;
+    text-align:left;
+    border-radius:9px;
+    padding:11px 12px;
+    font-size:11px;
+    font-weight:650;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:.2s;
+}
+
+.nav button:hover{
+    background:var(--pink-light);
+    color:var(--pink-dark);
+}
+
+.nav button.active{
+    background:var(--navy);
+    color:#fff;
+}
+
+.nav-icon{
+    width:24px;
+    height:24px;
+    border-radius:7px;
+    background:#eef4f6;
+    display:grid;
+    place-items:center;
+    font-size:12px;
+}
+
+.nav button.active .nav-icon{
+    background:rgba(255,255,255,.14);
+    color:#fff;
+}
+
+.sidebar-bottom{
+    position:absolute;
+    left:15px;
+    right:15px;
+    bottom:20px;
+}
+
+.engine{
+    padding:11px;
+    border:1px solid #f1dce5;
+    background:var(--pink-light);
+    border-radius:10px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.engine-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#2ca875;
+}
+
+.engine b{
+    display:block;
+    font-size:9px;
+}
+
+.engine small{
+    font-size:8px;
+    color:var(--muted);
+}
+
+/* MAIN */
+
+.main{
+    margin-left:235px;
+    padding:27px 35px 50px;
+}
+
+.page{
+    display:none;
+    animation:pageIn .3s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:21px;
+}
+
+.eyebrow{
+    color:var(--pink);
+    font-size:8px;
+    font-weight:850;
+    letter-spacing:1.4px;
+}
+
+.topbar h1{
+    font-size:25px;
+    margin-top:3px;
+}
+
+.system-status{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:8px 12px;
+    font-size:9px;
+    color:#667985;
+    font-weight:700;
+}
+
+.status-dot{
+    display:inline-block;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#2ca875;
+    margin-right:5px;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(115deg,#26344a,#514456);
+    color:#fff;
+    border-radius:16px;
+    padding:28px 30px;
+    position:relative;
+    overflow:hidden;
+    min-height:235px;
+    box-shadow:var(--shadow);
+}
+
+.hero h2{
+    font-size:25px;
+    margin-top:7px;
+    position:relative;
+    z-index:3;
+}
+
+.hero h2 span{
+    color:#f2a8c2;
+}
+
+.hero p{
+    position:relative;
+    z-index:3;
+    font-size:10px;
+    color:#ead8df;
+    line-height:1.7;
+    max-width:540px;
+    margin-top:7px;
+}
+
+.hero-actions{
+    display:flex;
+    gap:8px;
+    margin-top:17px;
+    position:relative;
+    z-index:4;
+}
+
+/* FACE ANIMATION */
+
+.face-ui{
+    position:absolute;
+    right:30px;
+    bottom:15px;
+    width:290px;
+    height:190px;
+}
+
+.face-card{
+    position:absolute;
+    background:rgba(255,255,255,.97);
+    border-radius:14px;
+    box-shadow:0 15px 35px rgba(0,0,0,.18);
+    color:var(--navy);
+}
+
+.face-main{
+    width:170px;
+    height:180px;
+    right:45px;
+    top:0;
+    padding:9px;
+    animation:float 4s ease-in-out infinite;
+}
+
+.face-mini{
+    width:105px;
+    height:65px;
+    left:0;
+    top:75px;
+    padding:10px;
+    animation:float 4.5s .5s ease-in-out infinite;
+}
+
+.face-side{
+    width:90px;
+    height:72px;
+    right:-5px;
+    bottom:0;
+    padding:10px;
+    animation:float 4.2s 1s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-7px)}
+}
+
+.face-header{
+    font-size:7px;
+    display:flex;
+    justify-content:space-between;
+    color:#71808c;
+}
+
+.live{
+    color:var(--pink);
+}
+
+.face-box{
+    height:118px;
+    margin-top:6px;
+    background:linear-gradient(145deg,#faedf3,#f1f5f7);
+    border-radius:9px;
+    position:relative;
+    overflow:hidden;
+}
+
+.face-outline{
+    position:absolute;
+    width:65px;
+    height:83px;
+    left:50%;
+    top:18px;
+    transform:translateX(-50%);
+    border:2px solid var(--pink);
+    border-radius:48%;
+    background:#ffe1db55;
+}
+
+.eye{
+    position:absolute;
+    width:5px;
+    height:4px;
+    border-radius:50%;
+    background:#404957;
+    top:34px;
+}
+
+.eye1{left:17px}
+.eye2{right:17px}
+
+.nose{
+    position:absolute;
+    width:3px;
+    height:13px;
+    background:#987780;
+    left:50%;
+    top:40px;
+}
+
+.mouth{
+    position:absolute;
+    width:17px;
+    height:6px;
+    border-bottom:2px solid #987780;
+    border-radius:50%;
+    left:50%;
+    top:60px;
+    transform:translateX(-50%);
+}
+
+.point{
+    position:absolute;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--pink);
+    animation:blink 1.7s infinite;
+}
+
+.pt1{left:49px;top:38px}
+.pt2{left:75px;top:38px}
+.pt3{left:62px;top:61px}
+.pt4{left:50px;top:78px}
+.pt5{left:75px;top:78px}
+
+@keyframes blink{
+    50%{transform:scale(1.5);opacity:.5}
+}
+
+.scan-line{
+    position:absolute;
+    left:18px;
+    right:18px;
+    height:2px;
+    background:var(--pink);
+    box-shadow:0 0 12px rgba(216,91,136,.7);
+    animation:scan 2.8s infinite;
+}
+
+@keyframes scan{
+    0%{top:15px}
+    50%{top:100px}
+    100%{top:15px}
+}
+
+/* BUTTON */
+
+.btn{
+    border:1px solid var(--border);
+    background:#fff;
+    color:var(--navy);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:9px;
+    font-weight:750;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    background:var(--pink);
+    border-color:var(--pink);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--pink-dark);
+}
+
+/* CARDS */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin:16px 0;
+}
+
+.stat{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:15px;
+    box-shadow:var(--shadow);
+}
+
+.stat-head{
+    display:flex;
+    justify-content:space-between;
+    color:var(--muted);
+    font-size:9px;
+    font-weight:700;
+}
+
+.stat h3{
+    font-size:22px;
+    margin-top:11px;
+}
+
+.stat p{
+    font-size:8px;
+    color:#9ba8af;
+    margin-top:3px;
+}
+
+.stat-icon{
+    width:27px;
+    height:27px;
+    border-radius:8px;
+    display:grid;
+    place-items:center;
+}
+
+.pink-bg{background:var(--pink-light);color:var(--pink)}
+.green-bg{background:var(--green-light);color:var(--green)}
+.blue-bg{background:var(--blue-light);color:var(--blue)}
+
+.panel{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:13px;
+    box-shadow:var(--shadow);
+}
+
+.panel-header{
+    padding:18px 20px;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1.4fr .8fr;
+    gap:15px;
+}
+
+.history-row{
+    display:grid;
+    grid-template-columns:1fr auto auto;
+    gap:12px;
+    align-items:center;
+    padding:11px 20px;
+    border-top:1px solid var(--border);
+    font-size:9px;
+}
+
+.history-row small{
+    display:block;
+    color:var(--muted);
+    margin-top:2px;
+    font-size:8px;
+}
+
+.badge{
+    font-size:7px;
+    font-weight:800;
+    border-radius:20px;
+    padding:4px 7px;
+}
+
+.badge-known{
+    background:var(--green-light);
+    color:var(--green);
+}
+
+.badge-unknown{
+    background:var(--red-light);
+    color:var(--red);
+}
+
+.quick-actions{
+    padding:0 20px 20px;
+    display:grid;
+    gap:8px;
+}
+
+/* RECOGNITION */
+
+.recognition-options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.recognition-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:23px;
+    box-shadow:var(--shadow);
+}
+
+.recognition-icon{
+    width:53px;
+    height:53px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    font-size:22px;
+    margin-bottom:18px;
+}
+
+.upload-icon{
+    background:var(--blue-light);
+    color:var(--blue);
+}
+
+.live-icon{
+    background:var(--pink-light);
+    color:var(--pink);
+}
+
+.recognition-card h2{
+    font-size:18px;
+    margin-top:5px;
+}
+
+.recognition-card p{
+    font-size:10px;
+    color:var(--muted);
+    line-height:1.7;
+    margin:7px 0 16px;
+}
+
+/* UPLOAD */
+
+.upload-box{
+    border:2px dashed #ead5df;
+    background:#fffafd;
+    border-radius:12px;
+    padding:25px;
+    text-align:center;
+    transition:.2s;
+}
+
+.upload-box:hover{
+    border-color:var(--pink);
+    background:#fff5f8;
+}
+
+.upload-box.dragover{
+    border-color:var(--pink);
+    background:#fff0f5;
+}
+
+.upload-icon-large{
+    font-size:32px;
+    color:var(--pink);
+    margin-bottom:8px;
+}
+
+.upload-box label{
+    display:inline-block;
+    color:var(--pink-dark);
+    font-weight:750;
+    font-size:10px;
+    cursor:pointer;
+}
+
+.upload-box input{
+    display:none;
+}
+
+#previewContainer{
+    display:none;
+    margin-top:15px;
+    text-align:center;
+}
+
+#previewImage{
+    max-width:100%;
+    max-height:280px;
+    border-radius:10px;
+    border:1px solid var(--border);
+}
+
+/* RESULT */
+
+.result-box{
+    display:none;
+    margin-top:16px;
+    padding:16px;
+    border-radius:11px;
+    border:1px solid var(--border);
+    background:#fff;
+}
+
+.result-title{
+    font-size:9px;
+    color:var(--muted);
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.result-name{
+    font-size:21px;
+    font-weight:800;
+    margin-top:5px;
+}
+
+.result-status{
+    display:inline-block;
+    margin-top:6px;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:8px;
+    font-weight:800;
+}
+
+.known{
+    color:var(--green);
+    background:var(--green-light);
+}
+
+.unknown{
+    color:var(--red);
+    background:var(--red-light);
+}
+
+.result-score{
+    margin-top:10px;
+    font-size:10px;
+    color:var(--muted);
+}
+
+.result-face{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--border);
+    font-size:9px;
+    color:var(--muted);
+}
+
+/* REGISTER */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:15px;
+}
+
+.form-card{
+    padding:21px;
+}
+
+.field{
+    margin:15px 0;
+}
+
+.field label{
+    display:block;
+    font-size:9px;
+    font-weight:750;
+    margin-bottom:6px;
+}
+
+.field input{
+    width:100%;
+    padding:10px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    outline:none;
+}
+
+.camera-box{
+    height:300px;
+    border-radius:11px;
+    background:var(--navy);
+    display:grid;
+    place-items:center;
+    color:#fff;
+}
+
+/* MANAGE */
+
+.manage-bar{
+    padding:17px 19px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.search{
+    width:250px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:9px;
+    font-size:9px;
+    outline:none;
+}
+
+.people{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:11px;
+    padding:17px;
+}
+
+.person-card{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:var(--pink-light);
+    color:var(--pink-dark);
+    display:grid;
+    place-items:center;
+    font-weight:800;
+}
+
+/* FEATURES */
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:13px;
+}
+
+.feature{
+    padding:19px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:13px;
+    box-shadow:var(--shadow);
+}
+
+.feature-icon{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:var(--pink-light);
+    color:var(--pink);
+    display:grid;
+    place-items:center;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.feature h3{
+    font-size:12px;
+}
+
+.feature p{
+    font-size:9px;
+    color:var(--muted);
+    line-height:1.7;
+    margin-top:5px;
+}
+
+.empty{
+    text-align:center;
+    padding:28px;
+    color:var(--muted);
+    font-size:9px;
+}
+
+.message{
+    margin-top:10px;
+    padding:10px;
+    border-radius:8px;
+    font-size:9px;
+    display:none;
+}
+
+.message.error{
+    display:block;
+    color:var(--red);
+    background:var(--red-light);
+}
+
+.message.success{
+    display:block;
+    color:var(--green);
+    background:var(--green-light);
+}
+
+@media(max-width:1000px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid,
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .face-ui{
+        opacity:.25;
+    }
+}
+
+@media(max-width:800px){
+    .sidebar{
+        width:65px;
+    }
+
+    .brand div:not(.brand-mark),
+    .nav button{
+        font-size:0;
+    }
+
+    .main{
+        margin-left:65px;
+    }
+
+    .recognition-options,
+    .people,
+    .feature-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+
+        <div class="brand-mark">
+            FS
+        </div>
+
+        <div>
+            <b>FaceSense AI</b>
+            <small>Face Intelligence</small>
+        </div>
+
+    </div>
+
+    <div class="nav-label">
+        PLATFORM
+    </div>
+
+    <nav class="nav">
+
+        <button class="active"
+                onclick="showPage('dashboard')">
+
+            <span class="nav-icon">⌂</span>
+            Dashboard
+
+        </button>
+
+        <button onclick="showPage('register')">
+
+            <span class="nav-icon">＋</span>
+            Register Person
+
+        </button>
+
+        <button onclick="showPage('recognition')">
+
+            <span class="nav-icon">▶</span>
+            Recognition
+
+        </button>
+
+        <button onclick="showPage('manage')">
+
+            <span class="nav-icon">▣</span>
+            Manage Registration
+
+        </button>
+
+        <button onclick="showPage('features')">
+
+            <span class="nav-icon">i</span>
+            Features
+
+        </button>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="engine">
+
+            <span class="engine-dot"></span>
+
+            <div>
+                <b>Recognition Engine</b>
+                <small>Online & ready</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+    <header class="topbar">
+
+        <div>
+            <div class="eyebrow">
+                INTELLIGENT FACE ANALYTICS
+            </div>
+
+            <h1>
+                Dashboard
+            </h1>
+        </div>
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+            System Operational
+        </div>
+
+    </header>
+
+
+    <section class="hero">
+
+        <div class="face-ui">
+
+            <div class="face-card face-mini">
+
+                <b style="font-size:8px">
+                    ✓ Verified
+                </b>
+
+                <div style="
+                    font-size:7px;
+                    color:#7d8292;
+                    margin-top:5px">
+
+                    Identity matched
+
+                </div>
+
+            </div>
+
+
+            <div class="face-card face-main">
+
+                <div class="face-header">
+
+                    <span class="live">
+                        ● LIVE
+                    </span>
+
+                    <span>
+                        FaceSense Vision
+                    </span>
+
+                </div>
+
+                <div class="face-box">
+
+                    <div class="face-outline">
+
+                        <span class="eye eye1"></span>
+                        <span class="eye eye2"></span>
+
+                        <span class="nose"></span>
+                        <span class="mouth"></span>
+
+                    </div>
+
+                    <span class="point pt1"></span>
+                    <span class="point pt2"></span>
+                    <span class="point pt3"></span>
+                    <span class="point pt4"></span>
+                    <span class="point pt5"></span>
+
+                    <div class="scan-line"></div>
+
+                </div>
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    margin-top:6px;
+                    font-size:8px">
+
+                    <b>Nikshepa</b>
+
+                    <strong style="color:#218a63">
+                        0.68
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="face-card face-side">
+
+                <div style="
+                    font-size:19px;
+                    color:#218a63">
+
+                    ✓
+
+                </div>
+
+                <b style="font-size:8px">
+                    Recognized
+                </b>
+
+                <div style="
+                    font-size:7px;
+                    color:#7d8292">
+
+                    Similarity match
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="eyebrow"
+             style="color:#f2a8c2">
+
+            FACE IDENTITY PLATFORM
+
+        </div>
+
+        <h2>
+            Secure identity.
+            <span>Intelligent recognition.</span>
+        </h2>
+
+        <p>
+            Identify registered people, reject unknown
+            faces and evaluate recognition performance
+            from one professional workspace.
+        </p>
+
+        <div class="hero-actions">
+
+            <button class="btn btn-primary"
+                    onclick="showPage('recognition')">
+
+                Start Recognition
+
+            </button>
+
+            <button class="btn"
+                    onclick="showPage('register')">
+
+                Register Person
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="stats">
+
+        <div class="stat">
+
+            <div class="stat-head">
+                Registered People
+
+                <span class="stat-icon pink-bg">
+                    ◉
+                </span>
+            </div>
+
+            <h3 id="userCount">—</h3>
+
+            <p>
+                Active identities
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-head">
+                Recognition Threshold
+
+                <span class="stat-icon blue-bg">
+                    ◇
+                </span>
+            </div>
+
+            <h3>0.41</h3>
+
+            <p>
+                Calibrated threshold
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-head">
+                Validation F1
+
+                <span class="stat-icon pink-bg">
+                    ✓
+                </span>
+            </div>
+
+            <h3>97.5%</h3>
+
+            <p>
+                Current validation
+            </p>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-head">
+                AI Engine
+
+                <span class="stat-icon green-bg">
+                    AI
+                </span>
+            </div>
+
+            <h3 style="color:#218a63">
+                Online
+            </h3>
+
+            <p>
+                YuNet + SFace
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="dashboard-grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="eyebrow">
+                    ACTIVITY
+                </div>
+
+                <h2 style="font-size:15px;margin-top:4px">
+                    Recent Recognition
+                </h2>
+
+            </div>
+
+            <div id="history">
+
+                <div class="empty">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="eyebrow">
+                    QUICK ACTIONS
+                </div>
+
+                <h2 style="font-size:15px;margin-top:4px">
+                    Workspace
+                </h2>
+
+            </div>
+
+            <div class="quick-actions">
+
+                <button class="btn btn-primary"
+                        onclick="showPage('recognition')">
+
+                    ▶ Identify a Face
+
+                </button>
+
+                <button class="btn"
+                        onclick="showPage('register')">
+
+                    ＋ Register Person
+
+                </button>
+
+                <button class="btn"
+                        onclick="showPage('manage')">
+
+                    ▣ Manage Registration
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+
+<!-- RECOGNITION -->
+
+<section id="recognition" class="page">
+
+    <header class="topbar">
+
+        <div>
+
+            <div class="eyebrow">
+                IDENTIFICATION
+            </div>
+
+            <h1>
+                Face Recognition
+            </h1>
+
+        </div>
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+            AI Engine Ready
+        </div>
+
+    </header>
+
+
+    <div class="panel"
+         style="padding:20px;margin-bottom:15px">
+
+        <div class="eyebrow">
+            CHOOSE INPUT
+        </div>
+
+        <h2 style="font-size:18px;margin-top:5px">
+            Select recognition method
+        </h2>
+
+        <p style="
+            font-size:9px;
+            color:var(--muted);
+            margin-top:5px">
+
+            Upload a photo or use live detection.
+
+        </p>
+
+    </div>
+
+
+    <div class="recognition-options">
+
+
+        <!-- UPLOAD -->
+
+        <div class="recognition-card">
+
+            <div class="recognition-icon upload-icon">
+                ↥
+            </div>
+
+            <div class="eyebrow">
+                ONE-TIME ANALYSIS
+            </div>
+
+            <h2>
+                Upload Photo
+            </h2>
+
+            <p>
+                Upload an image and FaceSense AI
+                will detect the face, generate the
+                SFace embedding and compare it with
+                registered identities.
+            </p>
+
+
+            <div class="upload-box"
+                 id="uploadBox">
+
+                <div class="upload-icon-large">
+                    ↑
+                </div>
+
+                <label for="photoInput">
+                    Click to choose a photo
+                </label>
+
+                <input
+                    id="photoInput"
+                    type="file"
+                    accept="image/jpeg,image/png,image/jpg,image/webp">
+
+                <div id="photoName"
+                     style="
+                     font-size:8px;
+                     color:var(--muted);
+                     margin-top:7px">
+
+                    JPG, JPEG, PNG or WEBP
+
+                </div>
+
+            </div>
+
+
+            <div id="previewContainer">
+
+                <img id="previewImage"
+                     alt="Selected image">
+
+            </div>
+
+
+            <button
+                id="analyzeButton"
+                class="btn btn-primary"
+                style="
+                width:100%;
+                margin-top:12px">
+
+                Analyze Photo
+
+            </button>
+
+
+            <div id="uploadMessage"
+                 class="message">
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div id="resultBox"
+                 class="result-box">
+
+                <div class="result-title">
+                    RECOGNITION RESULT
+                </div>
+
+                <div id="resultName"
+                     class="result-name">
+                    —
+                </div>
+
+                <div id="resultStatus">
+                </div>
+
+                <div id="resultScore"
+                     class="result-score">
+                </div>
+
+                <div id="resultFace"
+                     class="result-face">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LIVE -->
+
+        <div class="recognition-card">
+
+            <div class="recognition-icon live-icon">
+                ▶
+            </div>
+
+            <div class="eyebrow">
+                REAL-TIME
+            </div>
+
+            <h2>
+                Live Detection
+            </h2>
+
+            <p>
+                Use your webcam for continuous
+                face recognition and
+                unknown-person rejection.
+            </p>
+
+            <div style="
+                height:170px;
+                background:#26344a;
+                border-radius:11px;
+                display:grid;
+                place-items:center">
+
+                <div style="
+                    width:100px;
+                    height:120px;
+                    border:2px solid #f2a8c2;
+                    border-radius:45%;
+                    position:relative">
+
+                    <div class="scan-line"></div>
+
+                </div>
+
+            </div>
+
+            <button
+                class="btn btn-primary"
+                style="
+                width:100%;
+                margin-top:12px"
+                onclick="openLiveDetection()">
+
+                Open Live Detection
+
+            </button>
+
+            <div id="liveMessage"
+                 class="message">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- REGISTER -->
+<section id="register" class="page">
+
+    <div class="page-header">
+        <div>
+            <div class="eyebrow">IDENTITY ENROLLMENT</div>
+            <h1>Register Person</h1>
+            <p>
+                Add a new person to the FaceSense AI recognition database.
+            </p>
+        </div>
+    </div>
+
+    <div class="recognition-grid">
+
+        <!-- CAMERA -->
+        <div class="recognition-card">
+
+            <div class="recognition-icon">
+                +
+            </div>
+
+            <div class="eyebrow">
+                FACE REGISTRATION
+            </div>
+
+            <h2>Capture Face</h2>
+
+            <p>
+                Enter the person's name and capture their face
+                using your webcam.
+            </p>
+
+            <div style="
+                position:relative;
+                width:100%;
+                height:300px;
+                background:#26344a;
+                border-radius:14px;
+                overflow:hidden;
+                margin-top:20px;
+            ">
+
+                <video
+                    id="registerVideo"
+                    autoplay
+                    playsinline
+                    muted
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                    ">
+                </video>
+
+                <div
+                    id="registerStatus"
+                    style="
+                        position:absolute;
+                        left:15px;
+                        right:15px;
+                        bottom:15px;
+                        padding:12px;
+                        border-radius:10px;
+                        background:rgba(255,255,255,.94);
+                        color:#26344a;
+                        font-size:13px;
+                        font-weight:600;
+                        text-align:center;
+                    ">
+                    Camera not started
+                </div>
+
+            </div>
+
+            <button
+                class="btn btn-primary"
+                id="startRegisterCameraBtn"
+                onclick="startRegistrationCamera()"
+                style="
+                    width:100%;
+                    margin-top:15px;
+                ">
+                Open Camera
+            </button>
+
+        </div>
+
+
+        <!-- REGISTRATION DETAILS -->
+        <div class="recognition-card">
+
+            <div class="recognition-icon">
+                ID
+            </div>
+
+            <div class="eyebrow">
+                PERSON DETAILS
+            </div>
+
+            <h2>Create Identity</h2>
+
+            <p>
+                The system will generate a face embedding and
+                store it securely in the local database.
+            </p>
+
+            <label style="
+                display:block;
+                margin-top:25px;
+                margin-bottom:8px;
+                font-weight:700;
+                color:#26344a;
+            ">
+                Person Name
+            </label>
+
+            <input
+                type="text"
+                id="registerName"
+                placeholder="Enter full name"
+                style="
+                    width:100%;
+                    padding:14px;
+                    border:1px solid #e2d8de;
+                    border-radius:10px;
+                    font-size:14px;
+                    box-sizing:border-box;
+                    outline:none;
+                "
+            >
+
+            <button
+                class="btn btn-primary"
+                onclick="captureRegistration()"
+                style="
+                    width:100%;
+                    margin-top:18px;
+                ">
+                Capture & Register
+            </button>
+
+            <button
+                class="btn"
+                onclick="stopRegistrationCamera()"
+                style="
+                    width:100%;
+                    margin-top:10px;
+                    background:#fff0f5;
+                    color:#b94570;
+                    border-color:#f0d2df;
+                ">
+                Stop Camera
+            </button>
+
+            <div
+                id="registrationMessage"
+                class="message"
+                style="margin-top:15px;">
+            </div>
+
+            <div
+                id="registrationSamples"
+                style="
+                    margin-top:20px;
+                    padding:15px;
+                    background:#faf7f9;
+                    border-radius:10px;
+                    font-size:13px;
+                    color:#626878;
+                ">
+                Samples captured: <b>0</b>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MANAGE -->
+
+<section id="manage" class="page">
+
+    <header class="topbar">
+
+        <div>
+
+            <div class="eyebrow">
+                IDENTITY DATABASE
+            </div>
+
+            <h1>
+                Manage Registration
+            </h1>
+
+        </div>
+
+    </header>
+
+
+    <div class="panel">
+
+        <div class="manage-bar">
+
+            <b>
+                Registered People
+            </b>
+
+            <input
+                class="search"
+                id="personSearch"
+                placeholder="Search person"
+                oninput="filterPeople()">
+
+        </div>
+
+
+        <div id="peopleList"
+             class="people">
+
+            <div class="empty">
+                Loading...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section id="features" class="page">
+
+    <header class="topbar">
+
+        <div>
+
+            <div class="eyebrow">
+                PLATFORM CAPABILITIES
+            </div>
+
+            <h1>
+                Features
+            </h1>
+
+        </div>
+
+    </header>
+
+
+    <div class="feature-grid">
+
+        <div class="feature">
+            <div class="feature-icon">01</div>
+            <h3>Face Detection</h3>
+            <p>
+                YuNet detects faces from
+                images and camera frames.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">02</div>
+            <h3>Face Embeddings</h3>
+            <p>
+                SFace converts detected
+                faces into numerical embeddings.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">03</div>
+            <h3>Similarity Matching</h3>
+            <p>
+                Embeddings are compared
+                with registered identities.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">04</div>
+            <h3>Unknown Rejection</h3>
+            <p>
+                Low similarity scores are
+                rejected using the calibrated threshold.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">05</div>
+            <h3>Multi-Face Recognition</h3>
+            <p>
+                Multiple faces can be processed
+                from one image.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">06</div>
+            <h3>Evaluation</h3>
+            <p>
+                Genuine and impostor comparisons
+                can be evaluated.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<script>
+const API_URL = window.location.origin;
+
+let registerStream = null;
+let liveStream = null;
+let liveTimer = null;
+let liveRunning = false;
+let liveBusy = false;
+let registeredPeople = [];
+let registrationSamples = 0;
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+    }[c]));
+}
+
+function showMessage(id, message, type='info') {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'message ' + type;
+    el.style.display = 'block';
+}
+
+function showRegistrationMessage(message, type='info') {
+    const el = document.getElementById('registrationMessage');
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'message ' + type;
+    el.style.display = 'block';
+}
+
+function showPage(pageName) {
+    if (pageName !== 'recognition') stopLiveDetection();
+
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById(pageName);
+    if (page) page.classList.add('active');
+
+    document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+    const names = ['dashboard','register','recognition','manage','features'];
+    const index = names.indexOf(pageName);
+    const buttons = document.querySelectorAll('.nav button');
+    if (index >= 0 && buttons[index]) buttons[index].classList.add('active');
+
+    if (pageName === 'manage') loadPeople();
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
+async function apiJSON(url, options={}) {
+    const response = await fetch(url, options);
+    const text = await response.text();
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; }
+    catch { throw new Error('Server returned an invalid response.'); }
+    if (!response.ok) throw new Error(data.detail || `Request failed (${response.status})`);
+    return data;
+}
+
+async function loadUsers() {
+    const el = document.getElementById('userCount');
+    if (!el) return;
+    try {
+        const data = await apiJSON(`${API_URL}/users`);
+        el.textContent = data.count ?? 0;
+    } catch (e) {
+        console.error('Users:', e);
+        el.textContent = '—';
+    }
+}
+
+async function loadHistory() {
+    const container = document.getElementById('history');
+    if (!container) return;
+    try {
+        const data = await apiJSON(`${API_URL}/history`);
+        if (!data.history?.length) {
+            container.innerHTML = '<div class="empty">No recognition activity yet.</div>';
+            return;
+        }
+        container.innerHTML = data.history.slice(0,8).map(item => {
+            const known = item.status === 'known';
+            return `<div class="history-row">
+                <div><b>${escapeHTML(item.name || 'Unknown')}</b>
+                <small>${escapeHTML(item.timestamp || '')}</small></div>
+                <span class="badge ${known ? 'badge-known' : 'badge-unknown'}">${known ? 'KNOWN' : 'UNKNOWN'}</span>
+                <b>${Number(item.similarity || 0).toFixed(3)}</b>
+            </div>`;
+        }).join('');
+    } catch (e) {
+        console.error('History:', e);
+        container.innerHTML = '<div class="empty">Unable to load recognition history.</div>';
+    }
+}
+
+let selectedPhotoFile = null;
+
+const photoInput = document.getElementById('photoInput');
+const photoName = document.getElementById('photoName');
+const previewContainer = document.getElementById('previewContainer');
+const previewImage = document.getElementById('previewImage');
+const uploadBox = document.getElementById('uploadBox');
+const analyzeButton = document.getElementById('analyzeButton');
+
+/* ---------------- PHOTO SELECTION ---------------- */
+
+if (photoInput) {
+    photoInput.addEventListener('change', function () {
+        const file = this.files && this.files[0];
+        if (file) {
+            setSelectedPhoto(file);
+        }
+    });
+}
+
+/* Make the whole upload area clickable */
+if (uploadBox) {
+    uploadBox.addEventListener('click', function (event) {
+        if (event.target === photoInput) return;
+        if (event.target.closest('label')) return;
+        if (photoInput) photoInput.click();
+    });
+
+    uploadBox.addEventListener('dragover', function (event) {
+        event.preventDefault();
+        uploadBox.classList.add('dragover');
+    });
+
+    uploadBox.addEventListener('dragleave', function () {
+        uploadBox.classList.remove('dragover');
+    });
+
+    uploadBox.addEventListener('drop', function (event) {
+        event.preventDefault();
+        uploadBox.classList.remove('dragover');
+
+        const file = event.dataTransfer.files && event.dataTransfer.files[0];
+        if (file) setSelectedPhoto(file);
+    });
+}
+
+function setSelectedPhoto(file) {
+    const allowedTypes = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/webp'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+        selectedPhotoFile = null;
+        showMessage(
+            'uploadMessage',
+            'Please select a JPG, JPEG, PNG or WEBP image.',
+            'error'
+        );
+        return;
+    }
+
+    selectedPhotoFile = file;
+
+    if (photoName) {
+        photoName.textContent = '✓ ' + file.name;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        if (previewImage) {
+            previewImage.src = event.target.result;
+        }
+
+        if (previewContainer) {
+            previewContainer.style.display = 'block';
+        }
+    };
+
+    reader.onerror = function () {
+        showMessage(
+            'uploadMessage',
+            'Could not read the selected image.',
+            'error'
+        );
+    };
+
+    reader.readAsDataURL(file);
+
+    showMessage(
+        'uploadMessage',
+        'Photo selected. Click Analyze Photo.',
+        'success'
+    );
+}
+
+/* ---------------- ANALYZE PHOTO ---------------- */
+
+if (analyzeButton) {
+    analyzeButton.addEventListener('click', analyzePhoto);
+}
+
+async function analyzePhoto() {
+    if (!selectedPhotoFile) {
+        showMessage(
+            'uploadMessage',
+            'Please choose a photo first.',
+            'error'
+        );
+        return;
+    }
+
+    analyzeButton.disabled = true;
+    analyzeButton.textContent = 'Analyzing...';
+
+    showMessage(
+        'uploadMessage',
+        'FaceSense AI is detecting and recognizing the face...',
+        'success'
+    );
+
+    try {
+        const formData = new FormData();
+        formData.append(
+            'file',
+            selectedPhotoFile,
+            selectedPhotoFile.name || 'uploaded_face.jpg'
+        );
+
+        /* Use the same working FastAPI recognition endpoint */
+        const response = await fetch(
+            `${API_URL}/identify`,
+            {
+                method: 'POST',
+                body: formData
+            }
+        );
+
+        const text = await response.text();
+        let data;
+
+        try {
+            data = text ? JSON.parse(text) : {};
+        } catch (parseError) {
+            throw new Error(
+                'The server returned an invalid response.'
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail ||
+                `Recognition failed (${response.status})`
+            );
+        }
+
+        console.log('FaceSense recognition result:', data);
+
+        displayRecognitionResult(data);
+
+        showMessage(
+            'uploadMessage',
+            '✓ Recognition completed successfully.',
+            'success'
+        );
+
+        loadHistory();
+        loadUsers();
+    }
+    catch (error) {
+        console.error('Upload recognition error:', error);
+
+        showMessage(
+            'uploadMessage',
+            'Error: ' + error.message,
+            'error'
+        );
+    }
+    finally {
+        analyzeButton.disabled = false;
+        analyzeButton.textContent = 'Analyze Photo';
+    }
+}
+
+function displayRecognitionResult(data) {
+    const box = document.getElementById('resultBox');
+    const name = document.getElementById('resultName');
+    const status = document.getElementById('resultStatus');
+    const score = document.getElementById('resultScore');
+    const face = document.getElementById('resultFace');
+    if (!box || !name || !status || !score || !face) return;
+    box.style.display = 'block';
+    const results = data.results || [];
+    if (!results.length) {
+        name.textContent = 'No face detected';
+        status.innerHTML = '<span class="result-status unknown">NO FACE</span>';
+        score.textContent = 'Please upload a clear image containing a face.';
+        face.textContent = '';
+        return;
+    }
+    const first = results[0];
+    const known = first.status === 'known';
+    name.textContent = known ? (first.name || 'Known Person') : 'Unknown Person';
+    status.innerHTML = `<span class="result-status ${known ? 'known' : 'unknown'}">${known ? '✓ KNOWN PERSON' : '⚠ UNKNOWN PERSON'}</span>`;
+    score.innerHTML = `Similarity: <strong>${Number(first.similarity || 0).toFixed(4)}</strong> &nbsp;&nbsp; Threshold: <strong>${Number(data.threshold || 0).toFixed(2)}</strong>`;
+    face.innerHTML = `<b>${data.face_count ?? results.length}</b> face(s) detected.`;
+    if (results.length > 1) {
+        face.innerHTML += '<br><br>' + results.map((r,i) =>
+            `Face ${i+1}: <b>${escapeHTML(r.status === 'known' ? r.name : 'Unknown')}</b> — ${Number(r.similarity || 0).toFixed(4)}`
+        ).join('<br>');
+    }
+}
+
+async function startRegistrationCamera() {
+    const video = document.getElementById('registerVideo');
+    const status = document.getElementById('registerStatus');
+    const button = document.getElementById('startRegisterCameraBtn');
+    if (!video || !status) return;
+    try {
+        if (!navigator.mediaDevices?.getUserMedia) throw new Error('Camera access is not supported by this browser.');
+        if (registerStream) registerStream.getTracks().forEach(t => t.stop());
+        registerStream = await navigator.mediaDevices.getUserMedia({video:{width:{ideal:640},height:{ideal:480},facingMode:'user'},audio:false});
+        video.srcObject = registerStream;
+        await video.play();
+        status.textContent = '● Camera ready — position your face clearly';
+        status.style.color = '#218a63';
+        if (button) button.style.display = 'none';
+    } catch (e) {
+        console.error(e);
+        status.textContent = 'Camera error: ' + e.message;
+        status.style.color = '#d15d6b';
+    }
+}
+
+async function captureRegistration() {
+    const nameInput = document.getElementById('registerName');
+    const video = document.getElementById('registerVideo');
+    const status = document.getElementById('registerStatus');
+    if (!nameInput || !video) return;
+    const name = nameInput.value.trim();
+    if (!name) { showRegistrationMessage("Please enter the person's name.",'error'); nameInput.focus(); return; }
+    if (!registerStream) { showRegistrationMessage('Please open the camera first.','error'); return; }
+    if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+        showRegistrationMessage('Camera is not ready. Please wait for the video.','error'); return;
+    }
+    status.textContent = '● Capturing face...';
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve,'image/jpeg',0.9));
+    if (!blob) { showRegistrationMessage('Could not capture camera frame.','error'); return; }
+    const form = new FormData();
+    form.append('name', name);
+    form.append('file', blob, 'face_registration.jpg');
+    try {
+        status.textContent = '● Sending face to AI...';
+        const data = await apiJSON(`${API_URL}/register`, {method:'POST', body:form});
+        registrationSamples = data.samples || 1;
+        const samples = document.getElementById('registrationSamples');
+        if (samples) samples.innerHTML = `Samples captured: <b>${registrationSamples}</b>`;
+        status.textContent = '✓ Face captured successfully';
+        status.style.color = '#218a63';
+        showRegistrationMessage(`✓ ${data.name || name} registered successfully!`,'success');
+        nameInput.value = '';
+        loadUsers();
+        loadPeople();
+    } catch (e) {
+        console.error(e);
+        status.textContent = '⚠ Registration failed';
+        status.style.color = '#d15d6b';
+        showRegistrationMessage(e.message,'error');
+    }
+}
+
+function stopRegistrationCamera() {
+    if (registerStream) {
+        registerStream.getTracks().forEach(t => t.stop());
+        registerStream = null;
+    }
+    const video = document.getElementById('registerVideo');
+    if (video) video.srcObject = null;
+    const status = document.getElementById('registerStatus');
+    if (status) { status.textContent = 'Camera stopped'; status.style.color = '#626878'; }
+    const button = document.getElementById('startRegisterCameraBtn');
+    if (button) button.style.display = 'block';
+}
+
+async function openLiveDetection() {
+    const card = document.querySelector('#recognition .recognition-card:nth-child(2)');
+    const message = document.getElementById('liveMessage');
+    if (!card) return;
+    try {
+        if (!navigator.mediaDevices?.getUserMedia) throw new Error('Camera access is not supported by this browser.');
+        stopLiveDetection(false);
+        liveStream = await navigator.mediaDevices.getUserMedia({video:{width:{ideal:640},height:{ideal:480},facingMode:'user'},audio:false});
+        card.innerHTML = `
+            <div class="recognition-icon live-icon">●</div>
+            <div class="eyebrow">REAL-TIME RECOGNITION</div>
+            <h2>Live Detection</h2>
+            <p>FaceSense AI is analyzing the camera feed using YuNet + SFace.</p>
+            <div style="position:relative;width:100%;height:270px;background:#26344a;border-radius:12px;overflow:hidden">
+                <video id="liveVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover"></video>
+                <canvas id="liveCanvas" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none"></canvas>
+                <div id="liveOverlay" style="position:absolute;left:12px;right:12px;bottom:12px;padding:10px;border-radius:9px;background:rgba(255,255,255,.94);color:#26344a;font-size:10px;font-weight:700">Starting AI recognition...</div>
+            </div>
+            <button class="btn" style="width:100%;margin-top:12px;background:#fff0f5;color:#b94570;border-color:#f0d2df" onclick="stopLiveDetection()">■ Stop Live Detection</button>`;
+        const video = document.getElementById('liveVideo');
+        video.srcObject = liveStream;
+        await video.play();
+        liveRunning = true;
+        liveBusy = false;
+        await recognizeLiveFrame();
+        liveTimer = setInterval(recognizeLiveFrame, 1400);
+        if (message) message.style.display = 'none';
+    } catch (e) {
+        console.error(e);
+        if (liveStream) { liveStream.getTracks().forEach(t=>t.stop()); liveStream=null; }
+        showMessage('liveMessage','Camera could not be opened: ' + e.message,'error');
+    }
+}
+
+async function recognizeLiveFrame() {
+    if (!liveRunning || liveBusy) return;
+    const video = document.getElementById('liveVideo');
+    if (!video || video.readyState < 2 || !video.videoWidth) return;
+    liveBusy = true;
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve,'image/jpeg',0.82));
+        if (!blob) return;
+        const form = new FormData();
+        form.append('file',blob,'live_frame.jpg');
+        const data = await apiJSON(`${API_URL}/identify`,{method:'POST',body:form});
+        displayLiveResult(data);
+    } catch(e) {
+        console.error('Live recognition:',e);
+        const overlay = document.getElementById('liveOverlay');
+        if (overlay) overlay.textContent = 'Recognition error: ' + e.message;
+    } finally { liveBusy = false; }
+}
+
+function displayLiveResult(data) {
+    const overlay = document.getElementById('liveOverlay');
+    const canvas = document.getElementById('liveCanvas');
+    const video = document.getElementById('liveVideo');
+    if (!overlay || !canvas || !video) return;
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const results = data.results || [];
+    if (!results.length) { overlay.innerHTML = '<span style="color:#7d8292">● No face detected</span>'; return; }
+    results.forEach((r,i) => {
+        const b = r.bounding_box;
+        const known = r.status === 'known';
+        const score = Number(r.similarity || 0);
+        if (b) {
+            ctx.strokeStyle = known ? '#25b87a' : '#e05b6f';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(Number(b.x)||0,Number(b.y)||0,Number(b.width)||0,Number(b.height)||0);
+        }
+    });
+    overlay.innerHTML = results.map((r,i) => {
+        const score = Number(r.similarity || 0);
+        if (r.status === 'known') return `<div style="color:#218a63;margin-bottom:4px">✓ Face ${i+1}: <b>${escapeHTML(r.name || 'Known')}</b> ${(score*100).toFixed(1)}%</div>`;
+        return `<div style="color:#d15d6b;margin-bottom:4px">⚠ Face ${i+1}: <b>Unknown Person</b> ${(score*100).toFixed(1)}%</div>`;
+    }).join('');
+}
+
+function stopLiveDetection(restore=true) {
+    liveRunning = false; liveBusy = false;
+    if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+    if (liveStream) { liveStream.getTracks().forEach(t=>t.stop()); liveStream=null; }
+    if (!restore) return;
+    const card = document.querySelector('#recognition .recognition-card:nth-child(2)');
+    if (!card) return;
+    card.innerHTML = `
+        <div class="recognition-icon live-icon">▶</div>
+        <div class="eyebrow">REAL-TIME</div>
+        <h2>Live Detection</h2>
+        <p>Use your webcam for continuous face recognition and unknown-person rejection.</p>
+        <div style="height:170px;background:#26344a;border-radius:11px;display:grid;place-items:center">
+            <div style="width:100px;height:120px;border:2px solid #f2a8c2;border-radius:45%;position:relative"><div class="scan-line"></div></div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="openLiveDetection()">Open Live Detection</button>
+        <div id="liveMessage" class="message"></div>`;
+}
+
+async function loadPeople() {
+    const container = document.getElementById('peopleList');
+    if (!container) return;
+    try {
+        const data = await apiJSON(`${API_URL}/users`);
+        registeredPeople = data.users || [];
+        renderPeople(registeredPeople);
+    } catch(e) {
+        console.error(e);
+        container.innerHTML = '<div class="empty">Unable to load registered people.</div>';
+    }
+}
+
+function renderPeople(people) {
+    const container = document.getElementById('peopleList');
+    if (!container) return;
+    if (!people.length) { container.innerHTML = '<div class="empty">No registered people found.</div>'; return; }
+    container.innerHTML = people.map(p => {
+        const name = p.name || 'Unknown';
+        return `<div class="person-card"><div class="avatar">${escapeHTML(name.charAt(0).toUpperCase())}</div><div><b style="font-size:10px">${escapeHTML(name)}</b><small style="display:block;color:var(--muted);font-size:8px;margin-top:2px">Registered identity</small></div></div>`;
+    }).join('');
+}
+
+function filterPeople() {
+    const input = document.getElementById('personSearch');
+    const q = (input?.value || '').toLowerCase();
+    renderPeople(registeredPeople.filter(p => (p.name || '').toLowerCase().includes(q)));
+}
+
+window.addEventListener('beforeunload', () => {
+    stopRegistrationCamera();
+    stopLiveDetection(false);
+});
+
+loadUsers();
+loadHistory();
+</script>
+
+</body>
+</html>
