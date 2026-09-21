@@ -112,3 +112,24 @@ def log_recognition(
     connection.commit()
 
     connection.close()
+def delete_user(name):
+    connection = get_connection()
+
+    try:
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            DELETE FROM users
+            WHERE name = ?
+            """,
+            (name,)
+        )
+
+        connection.commit()
+
+        return cursor.rowcount > 0
+
+    finally:
+        connection.close()    
+    

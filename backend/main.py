@@ -13,14 +13,16 @@ from datetime import datetime
 
 from backend.recognition_service import (
     identify_image,
-    register_person
+    register_person,
+    delete_person
 )
 
 from backend.database import (
     initialize_database,
     get_connection,
     log_recognition,
-    add_user
+    add_user,
+    delete_user
 )
 
 
@@ -147,6 +149,42 @@ def get_users():
         "count": len(users),
         "users": users
     }
+@app.delete("/users/{name}")
+def delete_registered_user(name: str):
+    try:
+        name = name.strip()
+
+        if not name:
+            raise ValueError("Person name is required.")
+
+        # Delete face embeddings
+        face_deleted = delete_person(name)
+
+        if not face_deleted:
+            raise HTTPException(
+                status_code=404,
+                detail="Person not found in face database."
+            )
+
+        # Delete from SQLite users table
+        delete_user(name)
+
+        return {
+            "success": True,
+            "name": name,
+            "message": f"{name} deleted successfully."
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as error:
+        print("❌ Delete error:", error)
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(error)
+        )
 
 
 # ============================================================

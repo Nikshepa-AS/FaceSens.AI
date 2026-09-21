@@ -2369,16 +2369,133 @@ async function loadPeople() {
     }
 }
 
-function renderPeople(people) {
-    const container = document.getElementById('peopleList');
-    if (!container) return;
-    if (!people.length) { container.innerHTML = '<div class="empty">No registered people found.</div>'; return; }
-    container.innerHTML = people.map(p => {
-        const name = p.name || 'Unknown';
-        return `<div class="person-card"><div class="avatar">${escapeHTML(name.charAt(0).toUpperCase())}</div><div><b style="font-size:10px">${escapeHTML(name)}</b><small style="display:block;color:var(--muted);font-size:8px;margin-top:2px">Registered identity</small></div></div>`;
-    }).join('');
-}
+function renderPeople(people){
 
+    const container =
+        document.getElementById("peopleList");
+
+    if(!people.length){
+
+        container.innerHTML = `
+            <div class="empty">
+                No registered people found.
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        people.map(person => {
+
+            const name =
+                person.name || "Unknown";
+
+            return `
+
+                <div class="person-card">
+
+                    <div class="avatar">
+
+                        ${escapeHTML(
+                            name.charAt(0).toUpperCase()
+                        )}
+
+                    </div>
+
+                    <div style="flex:1;">
+
+                        <b style="font-size:10px">
+                            ${escapeHTML(name)}
+                        </b>
+
+                        <small style="
+                            display:block;
+                            color:var(--muted);
+                            font-size:8px;
+                            margin-top:2px">
+
+                            Registered identity
+
+                        </small>
+
+                    </div>
+
+                    <button
+                        class="btn"
+                        onclick="deletePerson('${escapeHTML(name)}')"
+                        style="
+                            color:#d15d6b;
+                            background:#fff0f4;
+                            border-color:#f0d2df;
+                            padding:7px 10px;
+                            font-size:8px;
+                        "
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+}
+async function deletePerson(name){
+
+    const confirmed = confirm(
+        `Are you sure you want to delete ${name}?`
+    );
+
+    if(!confirmed){
+        return;
+    }
+
+    try{
+
+        const response = await fetch(
+            `${API_URL}/users/${encodeURIComponent(name)}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const data = await response.json();
+
+        if(!response.ok){
+
+            throw new Error(
+                data.detail || "Delete failed."
+            );
+
+        }
+
+        alert(
+            `${name} deleted successfully.`
+        );
+
+        // Refresh registered people
+        await loadPeople();
+
+        // Refresh dashboard count
+        loadUsers();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Delete person error:",
+            error
+        );
+
+        alert(
+            "Could not delete person: " +
+            error.message
+        );
+
+    }
+}
 function filterPeople() {
     const input = document.getElementById('personSearch');
     const q = (input?.value || '').toLowerCase();

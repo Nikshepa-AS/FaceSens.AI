@@ -93,6 +93,16 @@ Recognition results can be stored in SQLite, including:
 - Recognition status
 - Timestamp
 
+### Person Management
+
+The system provides registration management functionality that allows users to:
+
+- View registered people
+- Search registered people
+- Delete a registered identity
+
+When a person is deleted, their stored face embedding is removed from the face database and their registered identity is removed from the SQLite users table.
+
 ### Evaluation
 
 The project includes an evaluation script that compares:
@@ -112,7 +122,7 @@ It also calculates:
 - FP
 - FN
 
-The evaluation script tests multiple similarity thresholds and selects a threshold based on F1-score.
+The evaluation script tests multiple similarity thresholds and selects a suitable operating threshold based on the evaluation results.
 
 ---
 
@@ -129,6 +139,7 @@ The evaluation script tests multiple similarity thresholds and selects a thresho
 - SFace
 - NumPy
 - Pandas
+- Scikit-learn
 
 ### Backend
 
@@ -161,7 +172,7 @@ The evaluation script tests multiple similarity thresholds and selects a thresho
 
 FaceSense AI uses two pretrained deep-learning models.
 
-### YuNet
+### YuNet — Face Detection
 
 YuNet is used for face detection.
 
@@ -173,11 +184,11 @@ Its responsibility is to determine:
 
 The output of the detector is then used as input for the face recognition stage.
 
-### SFace
+### SFace — Face Recognition and Embedding Generation
 
 SFace is used for face recognition and embedding generation.
 
-Instead of directly predicting a person's name, SFace converts the detected face into a numerical embedding.
+Instead of directly predicting a person's name, SFace converts the detected face into a numerical representation called a face embedding.
 
 Conceptually:
 
@@ -189,3 +200,6 @@ SFace
     |
     v
 Face Embedding
+    |
+    v
+Numerical Feature Vector

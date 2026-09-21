@@ -597,3 +597,15 @@ def register_person(name, image_bytes):
             f"{name} registered successfully."
         )
     }
+def delete_person(name):
+    database = load_database()
+
+    if name not in database:
+        return False
+
+    del database[name]
+
+    with open(DATABASE_FILE, "wb") as file:
+        pickle.dump(database, file)
+
+    return True
