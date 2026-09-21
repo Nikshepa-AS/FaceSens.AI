@@ -1608,8 +1608,3 @@ Development Evaluation:
 
 ---
 
-## Disclaimer
-
-FaceSense AI is a development and internship project. The reported evaluation results are specific to the available development data and should not be interpreted as a guarantee of real-world face-recognition performance.
-
-Biometric applications should undergo appropriate privacy, security, fairness, robustness, and compliance evaluation before deployment in real-world environments.
